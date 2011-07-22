@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>{% block title %}Fusion Table Sample{% endblock %}</title>
+  <link href="/static/hfwwg.css rel="stylesheeet" type="text/css"/>
+{% ifequal path '/map' %}
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/> 
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
+<script type="text/javascript"> 
+  var map;
+  var origin = null;
+  var destination = null;
+  var vertices = [];
+  var markers = [];
+  function initialize() {
+   
+    var richmond = new google.maps.LatLng(37.5536117554,  -77.4605636597);
+    var myOptions = {
+      zoom:13,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center: richmond
+    }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	
+	var layer = new google.maps.FusionTablesLayer({
+  query: {
+    select: 'Location',
+    from: '1125357'
+  },
+});
+layer.setMap(map);
+    
+    google.maps.event.addListener(map, 'click', function(event) {
+      vertices.push(event.latlng);
+    });
+  }
+ 
+  function addMarker(latlng) {
+    markers.push(new google.maps.Marker({
+      position: latlng, 
+      map: map,
+      icon: "http://maps.google.com/mapfiles/marker" + String.fromCharCode(markers.length + 65) + ".png"
+    }));    
+  }
+</script> 
+{% endifequal %}
+</head>
+<body {% ifequal path '/map' %}
+onload="initialize()" style="font-family: sans-serif;"{% endifequal %}>
+  <div id="header">
+  <h2><a href="index">Home</a></h2>
+  <ul>
+	<li><a href="map">Map</a></li>
+	<li><a href="styling">Settings</a></li>
+	<li><a href="login">Login</a></li>
+  </ul>
+  </div>
+    {% block bodycontent %}
+		Replace this
+	{% endblock %}
+</body>
+</html>
+
+
