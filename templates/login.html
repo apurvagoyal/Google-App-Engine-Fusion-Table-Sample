@@ -3,12 +3,23 @@
 	Fusion Table Login
 {% endblock %}
 {% block bodycontent %}
-	<form>
+	<h2> Please Log In </h2>
+	<p>
+	Please enter your id and password to create shapes on map
+	</p>
+	<form method="post" action="/login">
 	Username: <input type="text" name="username" /><br />
 	Password: <input type="password" name="password" />
 	<input type="submit" value="Submit" />
+	<input type="submit" value="Cancel" onclick="window.location='/login';return false;"/>
 	</form>
+	{% if error %}
+	<p>
+	{{error}}
+	</p>
+	{% endif %}
 {% endblock %}
+
 
 
 

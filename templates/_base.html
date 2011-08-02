@@ -3,6 +3,7 @@
   <title>{% block title %}Fusion Table Sample{% endblock %}</title>
   <link href="/static/hfwwg.css rel="stylesheeet" type="text/css"/>
 {% ifequal path '/map' %}
+
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/> 
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
@@ -43,16 +44,32 @@ layer.setMap(map);
     }));    
   }
 </script> 
+
 {% endifequal %}
 </head>
 <body {% ifequal path '/map' %}
 onload="initialize()" style="font-family: sans-serif;"{% endifequal %}>
   <div id="header">
-  <h2><a href="index">Home</a></h2>
+  <h2><a href="index">Home </a></h2>
+  {% if is_auth %}<h3>Welcome Apurva</h3>{% endif %}
   <ul>
-	<li><a href="map">Map</a></li>
-	<li><a href="styling">Settings</a></li>
-	<li><a href="login">Login</a></li>
+	<li><a href="map"
+	{% ifequal path '/map' %}
+			class="selected"
+	{% endifequal %}
+	>Map</a></li>
+	<li><a href="styling"
+	{% ifequal path '/styling' %}
+			class="selected"
+	{% endifequal %}>
+	Settings</a></li>
+	{% if username %}
+	<li><a href="/logout">Logout ({{username}})</a></li>
+	{% else %}
+	<li><a href="/login" {% ifequal path '/login' %}
+			class="selected"
+	{% endifequal %}>Login</a></li>
+	{% endif %}
   </ul>
   </div>
     {% block bodycontent %}

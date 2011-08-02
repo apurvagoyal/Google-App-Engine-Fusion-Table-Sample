@@ -11,9 +11,20 @@
 	Fusion Table Maps
 {% endblock %}
 {% block bodycontent %}
-  <div style="position:relative; border: 1px; width: 100%; height: 400px;"> 
-    <div id="map_canvas" style="border: 1px solid black; width:100%; height:500px"></div> 
+<div style="position:relative; border: 1px; width: 100%; height: 400px;"> 
+    <div id="map_canvas" style="border: 1px solid black; width:100%; height:400px"></div> 
   </div> 
+{% if username %}
+  <div style="border: 1px;">
+   <form>
+<input type="radio" name="feature" value="point" />Point<br />
+<input type="radio" name="feature" value="line" />Line<br/>
+<input type="radio" name="feature" value="polygon" />Polygon<br/>
+</form>
+</div>
+{% endif %}
 {% endblock %}
+
+
 
  
