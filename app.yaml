@@ -4,7 +4,10 @@ runtime: python
 api_version: 1
 
 handlers:
-
+  
+- url: /static
+  static_dir: static
+  
 - url: /.*
   script: index.py
   login: required

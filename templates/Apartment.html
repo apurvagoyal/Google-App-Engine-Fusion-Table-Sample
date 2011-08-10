@@ -8,22 +8,17 @@
  
 {% extends "_base.html" %}
 {% block title %}
-	Fusion Table Maps
+	House Review
 {% endblock %}
 {% block bodycontent %}
-<div id="map_canvas" style="height:600px;width:100%"></div> 
 {% if username %}
-  <div style="border: 1px;">
-   <form>
-<input type="radio" name="feature" value="point" />Point<br />
-<input type="radio" name="feature" value="line" />Line<br/>
-<input type="radio" name="feature" value="polygon" />Polygon<br/>
+ <form method="post" action="/house">
+Address: <input type="text" name="address" /><br />
+Rent ($ per month): <input type="text" name="rent" />
+# of Bedrooms: <input type="text" name="bedrooms" />
+Rating (min: 0 and max: 10): <input type="text" name="rating" />
+Review: <input type="text" name="review" />
 <input type="submit" value="save" />
 </form>
-</div>
 {% endif %}
 {% endblock %}
-
-
-
- 

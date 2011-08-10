@@ -1,0 +1,17 @@
+/*--------------------------------------
+Author: Apurva Goyal
+Created: 2011-8-3
+Description: Stylesheet for example 1
+----------------------------------------*/
+
+#map_canvas{
+border: 1px solid black;
+width:100%; 
+height:600px;
+}
+
+body{
+font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+font-size: small;
+background: #fff;
+}

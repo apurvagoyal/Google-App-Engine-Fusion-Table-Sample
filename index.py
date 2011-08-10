@@ -34,10 +34,40 @@ class LogoutHandler(webapp.RequestHandler):
     def get(self):
         self.session=Session()
         self.session.delete_item('username')
+        self.session.delete_item('ft_client')
         path=self.request.path
         temp=os.path.join(os.path.dirname(__file__),'templates/index.html')
         html=template.render(temp,{'path':path})
         self.response.out.write(html)
+
+class HousePage(webapp.RequestHandler):
+
+    def get(self):
+        path=self.request.path
+        self.session=Session()
+        temp=os.path.join(os.path.dirname(__file__),'templates/Apartment.html')
+        html=template.render(temp,{'path':path,'username':self.session.get('username')})
+        self.response.out.write(html)
+
+    def post(self):
+        import sys, getpass
+        self.session=Session()
+        ft_client=self.session.get('ft_client')
+        if ft_client is not None:
+            results = ft_client.query(SQL().showTables())
+            address = self.request.get('address')
+            rent = self.request.get('rent')
+            bedrooms = self.request.get('bedrooms')
+            rating = self.request.get('rating')
+            review = self.request.get('review')
+            rowid = int(ft_client.query(SQL().insert(1269105, {'Address':address, 'Rent': rent, 'Bedrooms': bedrooms,'Rating': rating,'Review': review})))
+            self.response.out.write(rowid)
+
+
+
+
+
+
 
 class AuthenticationPage(webapp.RequestHandler):
 
@@ -64,6 +94,7 @@ class AuthenticationPage(webapp.RequestHandler):
             if token is not None:
                 self.session['username']=username
                 ft_client = ftclient.ClientLoginFTClient(token)
+                self.session['ft_client']=ft_client
                 results = ft_client.query(SQL().showTables())
                 temp=os.path.join(os.path.dirname(__file__),'templates/index.html')
                 html=template.render(temp,{'username':username})
@@ -98,7 +129,7 @@ class MapPage(webapp.RequestHandler):
 
 def main():
 
-    app=webapp.WSGIApplication([('/index', HomePage),('/map', MapPage),('/login', AuthenticationPage),('/logout', LogoutHandler)],debug=True)
+    app=webapp.WSGIApplication([('/index', HomePage),('/map', MapPage),('/house',HousePage),('/login', AuthenticationPage),('/logout', LogoutHandler)],debug=True)
     wsgiref.handlers.CGIHandler().run(app)
 
 if __name__ == '__main__':
