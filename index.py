@@ -25,10 +25,11 @@ from util.sessions import Session
 class HomePage(webapp.RequestHandler):
     def get(self):
         logging.info("reached home page")
-        path=self.request.path
-        temp=os.path.join(os.path.dirname(__file__),'templates/index.html')
-        html=template.render(temp,{'path':path})
-        self.response.out.write(html)
+        '''path=self.request.path'''
+        '''temp=os.path.join(os.path.dirname(__file__),'templates/index.html')'''
+        '''html=template.render(temp,{'path':path})'''
+        '''self.response.out.write(html)'''
+        self.redirect("/map")
 
 class LogoutHandler(webapp.RequestHandler):
     def get(self):
@@ -60,14 +61,8 @@ class HousePage(webapp.RequestHandler):
             bedrooms = self.request.get('bedrooms')
             rating = self.request.get('rating')
             review = self.request.get('review')
-            rowid = int(ft_client.query(SQL().insert(1269105, {'Address':address, 'Rent': rent, 'Bedrooms': bedrooms,'Rating': rating,'Review': review})))
-            self.response.out.write(rowid)
-
-
-
-
-
-
+            rowid = (ft_client.query(SQL().insert(1269105, {'ADDRESS':str(address), 'Rent': str(rent), 'Bedrooms': str(bedrooms),'Rating': str(rating),'Review': str(review)})))
+            self.redirect("/map")
 
 class AuthenticationPage(webapp.RequestHandler):
 
@@ -98,7 +93,7 @@ class AuthenticationPage(webapp.RequestHandler):
                 results = ft_client.query(SQL().showTables())
                 temp=os.path.join(os.path.dirname(__file__),'templates/index.html')
                 html=template.render(temp,{'username':username})
-                self.response.out.write(html)
+                self.redirect("/house")
             else:
                 logging.info("unable to login")
                 temp=os.path.join(os.path.dirname(__file__),'templates/login.html')
@@ -126,10 +121,24 @@ class MapPage(webapp.RequestHandler):
         temp=os.path.join(os.path.dirname(__file__),'templates/map.html')
         html=template.render(temp,{'path':path,'username':self.session.get('username')})
         self.response.out.write(html)
+    def post(self):
+        import sys, getpass
+        self.session=Session()
+        ft_client=self.session.get('ft_client')
+        if ft_client is not None:
+
+            '''rent = self.request.get('rent')'''
+            bedrooms = self.request.get('bedrooms')
+            rating = self.request.get('rating')
+
+            rowid = (ft_client.query(SQL().insert(1269105, {'ADDRESS':str(address), 'Rent': str(rent), 'Bedrooms': str(bedrooms),'Rating': str(rating),'Review': str(review)})))
+            '''self.response.out.write(str(rowid))'''
+            self.redirect("/map")
+
 
 def main():
 
-    app=webapp.WSGIApplication([('/index', HomePage),('/map', MapPage),('/house',HousePage),('/login', AuthenticationPage),('/logout', LogoutHandler)],debug=True)
+    app=webapp.WSGIApplication([('/house',HousePage),('/login', AuthenticationPage),('/logout', LogoutHandler),('/map', MapPage),('/.*',HomePage)],debug=True)
     wsgiref.handlers.CGIHandler().run(app)
 
 if __name__ == '__main__':

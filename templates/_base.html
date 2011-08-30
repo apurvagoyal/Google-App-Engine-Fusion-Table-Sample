@@ -1,46 +1,43 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
   <title>{% block title %}Fusion Table Sample{% endblock %}</title>
   <link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
 {% ifequal path '/map' %}
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/> 
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script> 
 <script type="text/javascript" src="static/map.js"></script> 
 {% endifequal %}
 </head>
-<body {% ifequal path '/map' %}
-onload="initialize()" style="font-family: sans-serif;"{% endifequal %}>
+<body
+{% ifequal path '/map' %}
+onload="initialize()" style="font-family: sans-serif;" {% endifequal %}>
   <div id="header">
-  <h2><a href="index">Home </a></h2>
   {% if username %}<h3>Welcome ({{username}})</h3>{% endif %}
-  <ul>
-	<li><a href="map"
-	{% ifequal path '/map' %}
-			class="selected"
-	{% endifequal %}
-	>Map</a></li>
-	<li><a href="styling"
-	{% ifequal path '/styling' %}
-			class="selected"
-	{% endifequal %}>
-	Settings</a></li>
-	{% if username %}
-	<li><a href="/logout">Logout ({{username}})</a></li>
-	<li><a href="house"
+  <div id="menu-bar">
+	<div class="table">
+		<ul id="menu-bar-list">
+			<li><a href="map"
+				{% ifequal path '/map' %}
+						class="selected"
+				{% endifequal %}
+			>Home</a></li>
+			{% if username %}
+			<li><a href="/logout">Logout ({{username}})</a></li>
+			<li><a href="house"
 	{% ifequal path '/house' %}
 			class="selected"
 	{% endifequal %}
 	>House Review</a></li>
-	{% else %}
-	<li><a href="/login" {% ifequal path '/login' %}
+			{% else %}
+			<li><a href="/login" {% ifequal path '/login' %}
 			class="selected"
-	{% endifequal %}>Login</a></li>
-	{% endif %}
-  </ul>
-  </div>
+	{% endifequal %}>Submit a Review</a></li>
+			{% endif %}
+		</ul>
+	</div>
     {% block bodycontent %}
 		Replace this
 	{% endblock %}

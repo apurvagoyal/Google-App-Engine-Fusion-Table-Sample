@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<!DOCTYPE html> 
 <!--
  Copyright 2010 Google Inc. 
  Licensed under the Apache License, Version 2.0: 
@@ -11,14 +10,40 @@
 	Fusion Table Maps
 {% endblock %}
 {% block bodycontent %}
-<div id="map_canvas" style="height:600px;width:100%"></div> 
+<div id="map_canvas"></div> 
 {% if username %}
   <div style="border: 1px;">
-   <form>
-<input type="radio" name="feature" value="point" />Point<br />
-<input type="radio" name="feature" value="line" />Line<br/>
-<input type="radio" name="feature" value="polygon" />Polygon<br/>
-<input type="submit" value="save" />
+  Filter
+   <form method>
+Bedrooms: <select name="bedrooms" id="bedroom"> 
+  <option value="-1">All</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+</select>
+Rent (per month): <select name="rent" id="rent">
+  <option value="-1">All</option> 
+  <option value="700">Less Than 700</option>
+  <option value="1000">700-1000</option>
+  <option value="2000">1001-2000</option>
+  <option value="3000">Greater Than 2000</option>
+</select>
+Rating (out of 10): <select name="rating" id="rating"> 
+  <option value="-1">All</option>
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+</select>
+<input type="button" value="Filter" onClick="onClickFilterButton()"/>
 </form>
 </div>
 {% endif %}

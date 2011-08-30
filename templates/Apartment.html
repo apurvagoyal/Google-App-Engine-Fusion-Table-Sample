@@ -15,8 +15,25 @@
  <form method="post" action="/house">
 Address: <input type="text" name="address" /><br />
 Rent ($ per month): <input type="text" name="rent" />
-# of Bedrooms: <input type="text" name="bedrooms" />
-Rating (min: 0 and max: 10): <input type="text" name="rating" />
+# of Bedrooms:<select name="bedrooms"> 
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+</select>
+Rating (out of 10)<select name="rating"> 
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+</select>
 Review: <input type="text" name="review" />
 <input type="submit" value="save" />
 </form>

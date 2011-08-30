@@ -7,11 +7,47 @@ Description: Stylesheet for example 1
 #map_canvas{
 border: 1px solid black;
 width:100%; 
-height:600px;
+height:700px;
 }
 
 body{
 font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 font-size: small;
 background: #fff;
+}
+
+#menu-bar{
+height: 15px;
+background: #fff;
+}
+
+.table{
+display: table;
+margin: 0 auto;
+}
+
+ul#menu-bar-list{
+min-width: 696px;
+list-style: none;
+padding-top: 0px;
+}
+ul#menu-bar-list li{
+display: inline;
+}
+
+#menu-bar li {
+	float: left;
+	border: 1px solid;
+	border-bottom-width: 0;
+	margin: 0 0.5em 0 0;
+}
+
+#menu-bar li a {
+	padding: 0 1em;
+}
+
+#menu-bar  #selected {
+	position: relative;
+	top: 1px;
+	background: blue;
 }
