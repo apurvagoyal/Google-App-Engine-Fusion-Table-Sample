@@ -1,18 +1,13 @@
-<!DOCTYPE html> 
-<!--
- Copyright 2010 Google Inc. 
- Licensed under the Apache License, Version 2.0: 
- http://www.apache.org/licenses/LICENSE-2.0 
- --> 
- 
 {% extends "_base.html" %}
 {% block title %}
-	Fusion Table Maps
+	Choose your house
 {% endblock %}
 {% block bodycontent %}
-<div id="map_canvas"></div> 
-<div style="border: 1px;">
-  Select what you want in your house
+	<p>
+	Select what you want in your house
+	</p>
+	<div style="border: 1px;">
+  Filter
    <form method>
 Bedrooms: <select name="bedrooms" id="bedroom"> 
   <option value="-1">All</option>
@@ -45,8 +40,9 @@ Rating (out of 10): <select name="rating" id="rating">
 <input type="button" value="Filter" onClick="onClickFilterButton()"/>
 </form>
 </div>
+	{% if error %}
+	<p>
+	{{error}}
+	</p>
+	{% endif %}
 {% endblock %}
-
-
-
- 

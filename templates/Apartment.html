@@ -11,7 +11,6 @@
 	House Review
 {% endblock %}
 {% block bodycontent %}
-{% if username %}
  <form method="post" action="/house">
 Address: <input type="text" name="address" /><br />
 Rent ($ per month): <input type="text" name="rent" />
@@ -37,5 +36,4 @@ Rating (out of 10)<select name="rating">
 Review: <input type="text" name="review" />
 <input type="submit" value="save" />
 </form>
-{% endif %}
 {% endblock %}

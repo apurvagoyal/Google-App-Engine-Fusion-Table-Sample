@@ -2,6 +2,8 @@ var map;
 var layer;
 var infoWindow;
 var service;
+var queryWindow;
+
 function initialize() {
   
     
@@ -27,6 +29,9 @@ function initialize() {
 	}]
 });
 **/
+
+
+
 layer=new google.maps.FusionTablesLayer(1269105,{suppressInfoWindows:true},{styles: [
 	{
 	markerOptions: {iconName: "small_red"}
@@ -44,7 +49,8 @@ google.maps.event.addListener(layer,'click',function(e){
 	infoWindow=new google.maps.InfoWindow();
 	
    }
-   var content='<div id="info">'+
+   var content='<div id="container" style="width:300px">'+
+   '<div id="info" style="background-color:#FFA500;">'
 	'<h2>Information</h2>'+
 	'<b>Address: </b>';
    content=content+e.row['ADDRESS'].value +'<br>';
@@ -56,8 +62,28 @@ google.maps.event.addListener(layer,'click',function(e){
    content=content+ratingInfo;
     var reviewInfo='<b>Review: </b>'+e.row['Review'].value;
    content=content+reviewInfo ;
-   var showText='<h3>Show Me Nearby</h3>'+
-   '<input type="checkbox" id="schools" value="school"/>Schools</br>'+
+   content=content+'</div>';
+   var headerText='<div id="radiusdiv" style=background-color:#EEEEEE;clear:both;text-align:center;"'+
+      '<h3> <b>Show Me </b></h3></div>';
+	  content=content+headerText;
+   var showSchoolText='<div id="school" style=background-color:#FFD700;height:300px;width:100px;float:left;">'+
+   '<h4> Schools</h4>'+
+   '<label for="schoolType">School Type</label></br>'+
+    '<select id="schooltype">' +
+   '<option value="public">Public</option></br>' +
+   '<option value="charter">Charter</option></br>' +
+   '<option value="private">Private</option></br>' +
+   '<option value="private-charter-public">All</option></br>' +
+   '</select></br>'+
+     '<label for="schoollevel">School Level</label></br>'+
+     '<select id="schoollevel">' +
+   '<option value="elementary-schools">Elementary</option></br>' +
+   '<option value="middle-schools">Middle</option></br>' +
+   '<option value="high-schools">High</option></br>' +
+   '</select></br></div>';
+   content=content+showSchoolText;
+   var otherOptionsText='<div id="other options" style="background-color:#EEEEEE;height:300px;width:200px;float:left;">' +
+   '<h4> Other Options</h4>'+
    '<input type="checkbox" id="doctor" value="doctor"/>Doctors</br>'+
    '<input type="checkbox" id="dentist" value="dentist"/>Dentists</br>'+
    '<input type="checkbox" id="firestation" value="fire_station"/>Fire Station</br>'+
@@ -69,8 +95,19 @@ google.maps.event.addListener(layer,'click',function(e){
    '<input type="checkbox" id="pharmacy" value="pharmacy"/>Pharmacy</br>'+
    '<input type="checkbox" id="subway" value="subway_station"/>Subway Station</br>'+
    '<input type="checkbox" id="vet" value="veterinary_care"/>Veterinary Care</br>'+
-   '<button type="button" id="shownearby"  onClick="shownearby(' + e.latLng.lat() + ',' + e.latLng.lng() + ')"/>Show</button>';
-   content=content+showText+'</div>';
+   '</div>';
+   content=content+otherOptionsText;
+   var radiusText='<div id="radiusdiv" style=background-color:#FFA500;clear:both;text-align:center;"'+
+   '<label for="radius"> within Radius (miles)</label></br>'+
+    '<select id="radius">' +
+   '<option value="5">5</option></br>' +
+   '<option value="10">10</option></br>' +
+   '<option value="15">15</option></br>' +
+   '<option value="20">20</option></br>' +
+   '<option value="25">25</option></br>' +
+   '</select></br>'+
+   '<button type="button" id="shownearby"  onClick="shownearby(' + e.latLng.lat() + ',' + e.latLng.lng() + ')"/>Show</button></div>';
+   content=content+radiusText+'</div>';
    infoWindow.setOptions(
 	   {content: content,
 	   position:e.latLng
@@ -88,14 +125,17 @@ service=new google.maps.places.PlacesService(map);
 
 function shownearby(latitude,longitude, places)
 {
-var latlng = new google.maps.LatLng(latitude,longitude);
 
+var latlng = new google.maps.LatLng(latitude,longitude);
+var radius=document.getElementById('radius');
 
 var request={
 location: latlng,
-radius: 2000,
+radius: (radius.options[radius.selectedIndex].value)*1609.344,
 types: getPlaceTypes()
 };
+
+
 
 service.search(request, function(results, status)
 {
@@ -112,21 +152,73 @@ icon: place.icon,
 map: map
 
 });
+
+infoWindow.close();
+google.maps.event.addListener(marker,'click',function(){
+var request;
+for(i=0;i<results.length;i++)
+{
+if(results[i].geometry.location==this.position)
+{
+request={reference:results[i].reference};
 }
+}
+
+if(request!=null)
+{
+
+service.getDetails(request,function(place1,status)
+{
+
+if(!infoWindow)
+   {
+	infoWindow=new google.maps.InfoWindow();
+	
+   }
+   var content2='<div id="t">'+
+   '<h3>Details</h3>'+
+   '<b>Name: </b>'+place1.name +'<br>'+
+   '<b>Url: Click to see website</b><a href="' + place1.url+'"> Url</a><br>'+
+   '<b>Address: </b>'+place1.formatted_address+'<br>'+
+   '<b>Phone: </b>'+place1.formatted_phone_number+'<br>'+
+   '<b>Rating: </b>'+place1.rating;
+   
+   infoWindow.setOptions(
+	   {content: content2,
+	   position:place1.geometry.location
+	   }
+   );
+   infoWindow.open(map);
+});
+}
+
+
+
+});
+
+
+}
+
+
 }
 
 
 });
 }
 
+function createFilterButton()
+{
+
+}
+
 function getPlaceTypes()
 {
 var placetypes=[];
 
-var schools=document.getElementById('schools');
-if(schools.checked){
-placetypes.push(schools.value);
-}
+
+
+placetypes.push("school");
+
 
 var doctor=document.getElementById('doctor');
 if(doctor.checked){placetypes.push(doctor.value);}
@@ -164,14 +256,9 @@ if(vet.checked){placetypes.push(vet.value);}
 return placetypes;
 }
 
-function onPlacesMarkerClick()
-{
-
-
-}
-
 function onClickFilterButton()
 {
+
 var e=document.getElementById('rating');
 var rating=e.value;
 var bedroomControl=document.getElementById('bedroom');
@@ -227,6 +314,7 @@ if(rent>-1)
 	
 //
 }
+
 
 
 
